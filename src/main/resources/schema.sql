@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS content (
     content_type VARCHAR(50) NOT NULL,
     date_created TIMESTAMP NOT NULL,
     date_updated TIMESTAMP,
-    url VARCHAR(255)
+    url VARCHAR(255),
+    image_url VARCHAR(255)
     );
 
 -- INSERT INTO content(title, description, status, content_type, date_created)

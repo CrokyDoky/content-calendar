@@ -43,7 +43,8 @@ public class ContentCollectionRepository {
                 Type.ARTICLE,
                 LocalDateTime.now(),
                 null,
-                "");
+                "",
+                null);
 
         contentList.add(content);
     }

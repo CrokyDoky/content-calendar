@@ -3,9 +3,11 @@ package com.example.content_calendar.controller;
 import com.example.content_calendar.model.Content;
 import com.example.content_calendar.repository.ContentCollectionRepository;
 import com.example.content_calendar.repository.ContentRepository;
+import com.example.content_calendar.service.FileStorageService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class ContentController {
 
     private final ContentRepository repository;
+    private final FileStorageService fileStorageService;
 
-    public ContentController(ContentRepository repository) {
+    public ContentController(ContentRepository repository, FileStorageService fileStorageService) {
         this.repository = repository;
+        this.fileStorageService = fileStorageService;
     }
 
     @GetMapping("")
@@ -36,6 +40,24 @@ public class ContentController {
     @PostMapping("")
     public void create(@Valid @RequestBody Content content) {
         repository.save(content);
+    }
+
+    @PostMapping("/{id}/image")
+    public Content uploadImage(@PathVariable Integer id, @RequestParam("file")MultipartFile file) {
+        Content content = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Content not found"));
+
+        String imageUrl = fileStorageService.storeFile(file);
+
+        Content updated = new Content(
+                content.id(), content.title(), content.description(),
+                content.status(), content.contentType(),
+                content.dateCreated(), content.dateUpdated(),
+                content.url(), imageUrl
+        );
+
+        return repository.save(updated);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

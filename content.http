@@ -36,3 +36,9 @@ Content-Type: application/json
 
 ### Delete by Id
 DELETE http://localhost:8080/api/content/2
+
+### Upload Image
+POST http://localhost:8080/api/content/1/image
+Content-Type: multipart/form-data
+file: file (../test.jpg)
+

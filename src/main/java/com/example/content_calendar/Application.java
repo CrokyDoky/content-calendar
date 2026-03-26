@@ -28,7 +28,8 @@ public class Application {
 					Type.ARTICLE,
 					LocalDateTime.now(),
 					null,
-					"");
+					"",
+					null);
 			repository.save(content);
 		};
 	}
